@@ -1,3 +1,4 @@
+import base64
 from typing import Optional
 
 import typer
@@ -71,10 +72,14 @@ class Runner:
         )
         self.keenetic_client.auth()
 
-        description = "Keenetic Startup Config Backup"
-        filename, content = self.keenetic_client.startup_config()
+        description = "Keenetic Config Backup"
+        config_filename, config_content = self.keenetic_client.startup_config()
+        firmware_filename, firmware_content = self.keenetic_client.firmware()
         files = {
-            filename: InputFileContent(content),
+            config_filename: InputFileContent(config_content),
+            firmware_filename: InputFileContent(
+                base64.b64encode(firmware_content).decode()
+            ),
         }
 
         gist = self.get_gist(description=description)

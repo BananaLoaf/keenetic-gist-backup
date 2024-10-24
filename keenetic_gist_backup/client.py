@@ -45,9 +45,21 @@ class KeeneticClient:
         self.session = session
 
     def startup_config(self) -> tuple[str, str]:
+        logger.info("Downloading startup-config.txt")
         res = self.session.get(self._ci_endpoint + "startup-config.txt")
         res.raise_for_status()
+        logger.success("Done!")
         return (
             res.headers["Content-Disposition"].split("filename=")[-1].strip('"'),
             res.content.decode(),
+        )
+
+    def firmware(self) -> tuple[str, bytes]:
+        logger.info("Downloading firmware")
+        res = self.session.get(self._ci_endpoint + "firmware")
+        res.raise_for_status()
+        logger.success("Done!")
+        return (
+            res.headers["Content-Disposition"].split("filename=")[-1].strip('"'),
+            res.content,
         )
