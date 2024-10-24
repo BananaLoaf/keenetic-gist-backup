@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  keenetic_gist_backup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - KEENETIC_URL
+      - KEENETIC_USERNAME
+      - KEENETIC_PASSWORD
+      - GITHUB_TOKEN
