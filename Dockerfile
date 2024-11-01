@@ -17,4 +17,4 @@ ENV PYTHONUNBUFFERED=1
 HEALTHCHECK --interval=1m --timeout=10s \
   CMD keenetic-gist-backup healthcheck
 
-CMD sh -c 'echo "$SCHEDULE keenetic-gist-backup backup" | crontab -; crond -l 2 -f'
+CMD sh -c 'echo "${SCHEDULE} keenetic-gist-backup backup" | crontab -; crond -l 2 -f'
