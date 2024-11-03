@@ -13,4 +13,5 @@ services:
       - KEENETIC_USERNAME
       - KEENETIC_PASSWORD
       - GITHUB_TOKEN
+      - GIST_DESCRIPTION
       - SCHEDULE

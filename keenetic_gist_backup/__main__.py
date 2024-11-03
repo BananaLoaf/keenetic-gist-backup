@@ -19,6 +19,9 @@ class Runner:
     keenetic_username_option = typer.Option(..., envvar="KEENETIC_USERNAME")
     keenetic_password_option = typer.Option(..., envvar="KEENETIC_PASSWORD")
     github_token_option = typer.Option(..., envvar="GITHUB_TOKEN")
+    gist_description_option = typer.Option(
+        default="Keenetic Config Backup", envvar="GIST_DESCRIPTION"
+    )
 
     def __init__(
         self,
@@ -63,6 +66,7 @@ class Runner:
         keenetic_username: str = keenetic_username_option,
         keenetic_password: str = keenetic_password_option,
         github_token: str = github_token_option,
+        gist_description: str = gist_description_option,
     ):
         self = cls(
             keenetic_url=keenetic_url,
@@ -72,7 +76,6 @@ class Runner:
         )
         self.keenetic_client.auth()
 
-        description = "Keenetic Config Backup"
         config_filename, config_content = self.keenetic_client.startup_config()
         firmware_filename, firmware_content = self.keenetic_client.firmware()
         files = {
@@ -82,13 +85,15 @@ class Runner:
             ),
         }
 
-        gist = self.get_gist(description=description)
+        gist = self.get_gist(description=gist_description)
         if gist is not None:
-            gist.edit(description=description, files=files)
+            gist.edit(description=gist_description, files=files)
             logger.success(f"Updated existing gist: {gist.html_url}")
         else:
             gist = self.g.get_user().create_gist(
-                public=False, files=files, description=description
+                public=False,
+                files=files,
+                description=gist_description,
             )
             logger.success(f"Created new gist: {gist.html_url}")
 
