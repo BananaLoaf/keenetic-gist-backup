@@ -1,11 +1,10 @@
-version: '3'
-
 services:
   keenetic_gist_backup:
     container_name: keenetic-gist-backup
     build:
       context: .
       dockerfile: Dockerfile
+    pull_policy: build
     network_mode: host
     restart: unless-stopped
     environment:
